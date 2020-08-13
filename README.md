@@ -1,6 +1,40 @@
 # Jenkins Terraform Module
 
-A Terraform module that deploys a multi-az master using [ebs-pin][] and a spot ASG for build agents using [Self-Organizing Swarm Plug-in][]. The build agents scale preemtively based on demand using [jenkins-autoscaler][].
+This terraform module deploys Jenkins master and build agents in AWS.
+
+This module deploys a multi-az master using [ebs-pin][] and a spot Auto Scaling Group(ASG) for build agents using [Self-Organizing Swarm Plug-in][]. The build agents scale preemtively based on demand using [jenkins-autoscaler][].
+
+
+ This module creates the following resources:
+
+ - AWS Key pair
+ - AWS Public key
+ - AWS Security groups for the Jenkins
+ - DNS zone ID used for Jenkins records
+ - DNS record created for Jenkins master in dns_zone
+ - AWS Identity and Access Management (IAM) roles
+ - Jenkins certificates - ACM Certificate Domain Name for Jenkins
+
+ You have the option to:
+
+ - Size of root volume on Jenkins agents.
+   - The default value is 50
+ - Specify Instance type of agents.
+   -  The default value is "C5.large""
+ - Set  Max size of agents ASG.
+   - The default value is 20
+ - Set Minimum size of agents ASG.
+   - The default value is 2
+ - Set Max price for spot bids on agents
+   - The default value is 0.5
+ - Set AMI ID used by the Jenkins master instance
+   - The default value is ami-08589eca6dcc9b39c
+ - Instance type used by Jenkins master instance
+   - The default value is "T3.medium"
+ - Set Linux agents Userdata
+ - Set Linux ASG Userdata
+ - Set Userdata for the master Jenkins
+
 
 [ebs-pin]: https://github.com/aarongorka/ebs-pin
 [Self-Organizing Swarm Plug-in]: https://wiki.jenkins.io/display/JENKINS/Swarm+Plugin
