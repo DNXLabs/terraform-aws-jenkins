@@ -1,6 +1,6 @@
 resource "aws_security_group" "jenkins-master-lb" {
-  name = "${var.tags["Name"]}-jenkins-master-lb"
-  vpc_id      = var.vpc_id
+  name   = "${var.tags["Name"]}-jenkins-master-lb"
+  vpc_id = var.vpc_id
 
   ingress {
     from_port   = 80
@@ -36,9 +36,9 @@ resource "aws_lb" "jenkins-master-lb" {
 
 resource "aws_lb_listener" "jenkins-master-lb" {
   load_balancer_arn = aws_lb.jenkins-master-lb.arn
-  port            = 80
-  protocol        = "HTTP"
-  
+  port              = 80
+  protocol          = "HTTP"
+
   default_action {
     type = "redirect"
 
@@ -57,18 +57,18 @@ resource "aws_lb_listener" "jenkins-master-lb-https" {
   certificate_arn   = data.aws_acm_certificate.jenkins-cert.arn
 
   default_action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.jenkins-master-tg.arn
   }
 }
 resource "aws_lb_target_group" "jenkins-master-tg" {
-  name        = "${var.tags["Name"]}-jenkins-master-tg"
-  port        = 8080
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
+  name     = "${var.tags["Name"]}-jenkins-master-tg"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
 
   health_check {
-    path = "/whoAmI/"
+    path    = "/whoAmI/"
     matcher = "200,301,302"
   }
 
@@ -89,5 +89,5 @@ resource "aws_route53_record" "jenkins" {
 
 output "url" {
   description = "URL to access the Jenkins UI"
-  value = "https://${aws_route53_record.jenkins.fqdn}"
+  value       = "https://${aws_route53_record.jenkins.fqdn}"
 }
