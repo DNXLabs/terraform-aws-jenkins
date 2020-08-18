@@ -3,10 +3,14 @@ resource "aws_security_group" "jenkins-master" {
   vpc_id = var.vpc_id
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    security_groups = compact([aws_security_group.jenkins-master-lb.id,try(aws_security_group.windows-jenkins-agents[0].id, null),try(aws_security_group.linux-jenkins-agents[0].id, null)])
+    from_port = 8080
+    to_port   = 8080
+    protocol  = "tcp"
+    security_groups = compact([
+      aws_security_group.jenkins-master-lb.id,
+      try(aws_security_group.windows-jenkins-agents[0].id, null),
+      try(aws_security_group.linux-jenkins-agents[0].id, null)
+    ])
   }
 
   ingress {
@@ -20,7 +24,11 @@ resource "aws_security_group" "jenkins-master" {
     from_port = 43863
     to_port   = 43863
     protocol  = "tcp"
-    security_groups = compact([aws_security_group.jenkins-master-lb.id,try(aws_security_group.windows-jenkins-agents[0].id, null),try(aws_security_group.linux-jenkins-agents[0].id, null)])
+    security_groups = compact([
+      aws_security_group.jenkins-master-lb.id,
+      try(aws_security_group.windows-jenkins-agents[0].id, null),
+      try(aws_security_group.linux-jenkins-agents[0].id, null)
+    ])
   }
 
   egress {
@@ -50,7 +58,7 @@ resource "aws_launch_template" "jenkins-master" {
   vpc_security_group_ids = ["${aws_security_group.jenkins-master.id}"]
   key_name               = var.aws_key_pair_name
   user_data              = base64encode(data.template_file.master-userdata.rendered)
-  iam_instance_profile  {
+  iam_instance_profile {
     name = aws_iam_instance_profile.jenkins-master.name
   }
 
@@ -70,7 +78,7 @@ resource "aws_launch_template" "jenkins-master" {
 }
 
 resource "aws_autoscaling_group" "jenkins-master" {
-  name_prefix               = "${var.tags["Name"]}-jenkins-master"
+  name_prefix = "${var.tags["Name"]}-jenkins-master"
 
   launch_template {
     id      = aws_launch_template.jenkins-master.id
@@ -86,10 +94,10 @@ resource "aws_autoscaling_group" "jenkins-master" {
   health_check_type         = "ELB"
   health_check_grace_period = "600"
 
-  tags = [ map("key", "Name", "value", "${var.tags["Name"]}-jenkins-master", "propagate_at_launch", "true") ]
+  tags = [map("key", "Name", "value", "${var.tags["Name"]}-jenkins-master", "propagate_at_launch", "true")]
 }
 
 output "master_ssh" {
   description = "SSH to access the Jenkins master instance"
-  value = "ec2-user@${var.dns_name}.${var.dns_base_name}"
+  value       = "ec2-user@${var.dns_name}.${var.dns_base_name}"
 }
