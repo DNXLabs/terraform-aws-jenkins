@@ -1,5 +1,5 @@
 data "template_file" "master-userdata" {
-  template = "${file("${path.module}/master-userdata.tpl")}"
+  template = file("${path.module}/master-userdata.tpl")
 
   vars = {
     jenkins_unique_id = var.jenkins_unique_id
@@ -12,7 +12,7 @@ data "template_file" "master-userdata" {
 }
 
 data "template_file" "agents-userdata" {
-  template = "${file("${path.module}/linux-agents-userdata.tpl")}"
+  template = file("${path.module}/linux-agents-userdata.tpl")
 
   vars = {
     http_proxy    = var.http_proxy
@@ -36,5 +36,5 @@ data "template_file" "windows-agents-userdata" {
 }
 
 data "aws_acm_certificate" "jenkins-cert" {
-  domain = "${var.jenkins-cert}"
+  domain = var.jenkins-cert
 }
