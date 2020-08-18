@@ -2,10 +2,9 @@
 
 This terraform module deploys Jenkins master and build agents in AWS.
 
-This module deploys a multi-az master using [ebs-pin][] and a spot Auto Scaling Group(ASG) for build agents using [Self-Organizing Swarm Plug-in][]. The build agents scale preemtively based on demand using [jenkins-autoscaler][].
+This module deploys a multi-az master using `ebs-pin` and a spot Auto Scaling Group(ASG) for build agents using [Self-Organizing Swarm Plug-in][]. The build agents scale preemtively based on demand using `jenkins-autoscaler`.
 
-
- This module creates the following resources:
+The following resources will be created:
 
  - AWS Key pair
  - AWS Public key
@@ -34,7 +33,6 @@ This module deploys a multi-az master using [ebs-pin][] and a spot Auto Scaling 
  - Set Linux agents Userdata
  - Set Linux ASG Userdata
  - Set Userdata for the master Jenkins
-
 
 [ebs-pin]: https://github.com/aarongorka/ebs-pin
 [Self-Organizing Swarm Plug-in]: https://wiki.jenkins.io/display/JENKINS/Swarm+Plugin
