@@ -3,10 +3,14 @@ resource "aws_security_group" "jenkins-master" {
   vpc_id = var.vpc_id
 
   ingress {
-    from_port       = 8080
-    to_port         = 8080
-    protocol        = "tcp"
-    security_groups = compact([aws_security_group.jenkins-master-lb.id, try(aws_security_group.windows-jenkins-agents[0].id, null), try(aws_security_group.linux-jenkins-agents[0].id, null)])
+    from_port = 8080
+    to_port   = 8080
+    protocol  = "tcp"
+    security_groups = compact([
+      aws_security_group.jenkins-master-lb.id,
+      try(aws_security_group.windows-jenkins-agents[0].id, null),
+      try(aws_security_group.linux-jenkins-agents[0].id, null)
+    ])
   }
 
   ingress {
@@ -17,10 +21,14 @@ resource "aws_security_group" "jenkins-master" {
   }
 
   ingress {
-    from_port       = 43863
-    to_port         = 43863
-    protocol        = "tcp"
-    security_groups = compact([aws_security_group.jenkins-master-lb.id, try(aws_security_group.windows-jenkins-agents[0].id, null), try(aws_security_group.linux-jenkins-agents[0].id, null)])
+    from_port = 43863
+    to_port   = 43863
+    protocol  = "tcp"
+    security_groups = compact([
+      aws_security_group.jenkins-master-lb.id,
+      try(aws_security_group.windows-jenkins-agents[0].id, null),
+      try(aws_security_group.linux-jenkins-agents[0].id, null)
+    ])
   }
 
   egress {
