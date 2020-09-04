@@ -61,6 +61,7 @@ The following resources will be created:
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | account\_name | account name | `any` | n/a | yes |
+| agents\_desired\_capacity | Desired capacity of agents ASG | `string` | `"1"` | no |
 | agents\_disk\_size | Size of root volume on Jenkins agents | `string` | `"50"` | no |
 | agents\_instance\_type | Instance type of agents | `string` | `"c5.large"` | no |
 | agents\_max\_size | Max size of agents ASG | `string` | `"20"` | no |
@@ -71,9 +72,10 @@ The following resources will be created:
 | asg\_tags | Tags used for ASGs, has an addition attribute propagate\_at\_launch on every map. Do not include 'Name'. | `list` | n/a | yes |
 | aws\_key\_pair\_name | Keypair for the Jenkins master instance | `any` | n/a | yes |
 | aws\_key\_pair\_public\_key | Public Key in authorized\_keys format | `any` | n/a | yes |
+| create\_dns\_record | Create or not DNS Record | `bool` | `true` | no |
 | dns\_base\_name | DNS base zone, e.g. example.com | `any` | n/a | yes |
 | dns\_name | DNS record created for Jenkins master in dns\_zone | `any` | n/a | yes |
-| dns\_zone | DNS zone ID used for Jenkins records | `any` | n/a | yes |
+| dns\_zone | DNS zone ID used for Jenkins records | `any` | `null` | no |
 | http\_proxy | HTTP Proxy used in the Jenkins userdata script | `any` | n/a | yes |
 | instance\_type | Instance type used by Jenkins master instance | `string` | `"t3.medium"` | no |
 | jenkins-cert | ACM Certificate Domain Name for Jenkins | `any` | n/a | yes |
@@ -83,6 +85,7 @@ The following resources will be created:
 | master\_ebs\_jenkinshome\_size | Size of the master jenkins home volume | `string` | `"50"` | no |
 | master\_ebs\_root\_size | Size of the master EBS root volume | `string` | `"20"` | no |
 | master\_subnet\_ids | Subnet ID for the Jenkins master instance. Multi AZ is supported :) | `list` | n/a | yes |
+| name | name of jenkins | `any` | n/a | yes |
 | no\_proxy | Proxy exceptions used in the Jenkins userdata script | `any` | n/a | yes |
 | tags | Tags used for all resources except asgs | `map` | n/a | yes |
 | vpc\_id | VPC ID used by the Jenkins master instance | `any` | n/a | yes |
