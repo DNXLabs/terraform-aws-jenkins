@@ -1,6 +1,6 @@
 resource "aws_autoscaling_group" "linux-jenkins-agents" {
   count       = var.linux_workers ? 1 : 0
-  name_prefix = "${var.tags["Name"]}-linux-jenkins-agents"
+  name_prefix = "${var.name}-linux-jenkins-agents"
 
   launch_template {
     id      = aws_launch_template.linux-jenkins-agents[0].id
@@ -11,20 +11,21 @@ resource "aws_autoscaling_group" "linux-jenkins-agents" {
   enabled_metrics     = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
   min_size            = var.agents_min_size
   max_size            = var.agents_max_size
+  desired_capacity = var.agents_desired_capacity
 
-  tags = [map("key", "Name", "value", "${var.tags["Name"]}-linux-jenkins-agents", "propagate_at_launch", "true")]
+  tags = [map("key", "Name", "value", "${var.name}-linux-jenkins-agents", "propagate_at_launch", "true")]
 }
 
 resource "aws_autoscaling_policy" "linux-jenkins-agents-scale-in-policy" {
   count                  = var.linux_workers ? 1 : 0
-  name                   = "${var.tags["Name"]}-linux-jenkins-agents-scale-in-policy"
+  name                   = "${var.name}-linux-jenkins-agents-scale-in-policy"
   autoscaling_group_name = aws_autoscaling_group.linux-jenkins-agents[0].name
   scaling_adjustment     = "-1"
   adjustment_type        = "ChangeInCapacity"
 }
 resource "aws_cloudwatch_metric_alarm" "linux-jenkins-agents-scale-in-alarm" {
   count               = var.linux_workers ? 1 : 0
-  alarm_name          = "${var.tags["Name"]}-linux-jenkins-agents-scale-in"
+  alarm_name          = "${var.name}-linux-jenkins-agents-scale-in"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   metric_name         = "FreeExecutors"
   namespace           = "Jenkins"
@@ -42,14 +43,14 @@ resource "aws_cloudwatch_metric_alarm" "linux-jenkins-agents-scale-in-alarm" {
 
 resource "aws_autoscaling_policy" "linux-jenkins-agents-scale-out-policy" {
   count                  = var.linux_workers ? 1 : 0
-  name                   = "${var.tags["Name"]}-linux-jenkins-agents-scale-out-policy"
+  name                   = "${var.name}-linux-jenkins-agents-scale-out-policy"
   autoscaling_group_name = aws_autoscaling_group.linux-jenkins-agents[0].name
-  scaling_adjustment     = "2"
+  scaling_adjustment     = "1"
   adjustment_type        = "ChangeInCapacity"
 }
 resource "aws_cloudwatch_metric_alarm" "linux-jenkins-agents-scale-out-alarm" {
   count               = var.linux_workers ? 1 : 0
-  alarm_name          = "${var.tags["Name"]}-linux-jenkins-agents-scale-out"
+  alarm_name          = "${var.name}-linux-jenkins-agents-scale-out"
   comparison_operator = "LessThanOrEqualToThreshold"
   metric_name         = "FreeExecutors"
   namespace           = "Jenkins"
@@ -67,7 +68,7 @@ resource "aws_cloudwatch_metric_alarm" "linux-jenkins-agents-scale-out-alarm" {
 
 resource "aws_launch_template" "linux-jenkins-agents" {
   count                  = var.linux_workers ? 1 : 0
-  name_prefix            = "${var.tags["Name"]}-linux-jenkins-agents"
+  name_prefix            = "${var.name}-linux-jenkins-agents"
   image_id               = var.ami_id
   instance_type          = var.agents_instance_type
   vpc_security_group_ids = ["${aws_security_group.linux-jenkins-agents[0].id}"]
@@ -101,13 +102,13 @@ resource "aws_launch_template" "linux-jenkins-agents" {
 
 resource "aws_iam_instance_profile" "linux-jenkins-agents" {
   count = var.linux_workers ? 1 : 0
-  name  = "${var.tags["Name"]}-linux-jenkins-agents"
+  name  = "${var.name}-linux-jenkins-agents"
   role  = aws_iam_role.jenkins_role.name
 }
 
 resource "aws_security_group" "linux-jenkins-agents" {
   count  = var.linux_workers ? 1 : 0
-  name   = "${var.tags["Name"]}-linux-jenkins-agents"
+  name   = "${var.name}-linux-jenkins-agents"
   vpc_id = var.vpc_id
 
   ingress {

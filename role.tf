@@ -1,5 +1,5 @@
 resource "aws_iam_role" "jenkins_role" {
-  name               = "${var.tags["Name"]}-jenkins-role"
+  name               = "${var.name}-jenkins-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",

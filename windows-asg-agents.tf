@@ -1,7 +1,7 @@
 resource "aws_autoscaling_group" "windows-jenkins-agents" {
   count = var.windows_workers ? 1 : 0
 
-  name_prefix = "${var.tags["Name"]}-windows-jenkins-agents"
+  name_prefix = "${var.name}-windows-jenkins-agents"
 
   launch_template {
     id      = aws_launch_template.windows-jenkins-agents[0].id
@@ -13,19 +13,19 @@ resource "aws_autoscaling_group" "windows-jenkins-agents" {
   min_size            = var.agents_min_size
   max_size            = var.agents_max_size
 
-  tags = [map("key", "Name", "value", "${var.tags["Name"]}-windows-jenkins-agents", "propagate_at_launch", true)]
+  tags = [map("key", "Name", "value", "${var.name}-windows-jenkins-agents", "propagate_at_launch", true)]
 }
 
 resource "aws_autoscaling_policy" "windows-jenkins-agents-scale-in-policy" {
   count                  = var.windows_workers ? 1 : 0
-  name                   = "${var.tags["Name"]}-windows-jenkins-agents-scale-in-policy"
+  name                   = "${var.name}-windows-jenkins-agents-scale-in-policy"
   autoscaling_group_name = aws_autoscaling_group.windows-jenkins-agents[0].name
   scaling_adjustment     = "-1"
   adjustment_type        = "ChangeInCapacity"
 }
 resource "aws_cloudwatch_metric_alarm" "windows-jenkins-agents-scale-in-alarm" {
   count               = var.windows_workers ? 1 : 0
-  alarm_name          = "${var.tags["Name"]}-windows-jenkins-agents-scale-in"
+  alarm_name          = "${var.name}-windows-jenkins-agents-scale-in"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   metric_name         = "FreeExecutors"
   namespace           = "Jenkins"
@@ -43,14 +43,14 @@ resource "aws_cloudwatch_metric_alarm" "windows-jenkins-agents-scale-in-alarm" {
 
 resource "aws_autoscaling_policy" "windows-jenkins-agents-scale-out-policy" {
   count                  = var.windows_workers ? 1 : 0
-  name                   = "${var.tags["Name"]}-windows-jenkins-agents-scale-out-policy"
+  name                   = "${var.name}-windows-jenkins-agents-scale-out-policy"
   autoscaling_group_name = aws_autoscaling_group.windows-jenkins-agents[0].name
   scaling_adjustment     = "2"
   adjustment_type        = "ChangeInCapacity"
 }
 resource "aws_cloudwatch_metric_alarm" "windows-jenkins-agents-scale-out-alarm" {
   count               = var.windows_workers ? 1 : 0
-  alarm_name          = "${var.tags["Name"]}-windows-jenkins-agents-scale-out"
+  alarm_name          = "${var.name}-windows-jenkins-agents-scale-out"
   comparison_operator = "LessThanOrEqualToThreshold"
   metric_name         = "FreeExecutors"
   namespace           = "Jenkins"
@@ -68,7 +68,7 @@ resource "aws_cloudwatch_metric_alarm" "windows-jenkins-agents-scale-out-alarm" 
 
 resource "aws_launch_template" "windows-jenkins-agents" {
   count                  = var.windows_workers ? 1 : 0
-  name_prefix            = "${var.tags["Name"]}-windows-jenkins-agents"
+  name_prefix            = "${var.name}-windows-jenkins-agents"
   image_id               = var.windows_ami_id
   instance_type          = var.agents_instance_type
   vpc_security_group_ids = ["${aws_security_group.windows-jenkins-agents[0].id}"]
@@ -102,13 +102,13 @@ resource "aws_launch_template" "windows-jenkins-agents" {
 
 resource "aws_iam_instance_profile" "windows-jenkins-agents" {
   count = var.windows_workers ? 1 : 0
-  name  = "${var.tags["Name"]}-windows-jenkins-agents"
+  name  = "${var.name}-windows-jenkins-agents"
   role  = aws_iam_role.jenkins_role.name
 }
 
 resource "aws_security_group" "windows-jenkins-agents" {
   count  = var.windows_workers ? 1 : 0
-  name   = "${var.tags["Name"]}-windows-jenkins-agents"
+  name   = "${var.name}-windows-jenkins-agents"
   vpc_id = var.vpc_id
 
   ingress {

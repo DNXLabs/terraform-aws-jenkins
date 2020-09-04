@@ -1,5 +1,5 @@
 resource "aws_security_group" "jenkins-master" {
-  name   = "${var.tags["Name"]}-jenkins-master-sg"
+  name   = "${var.name}-jenkins-master-sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -47,12 +47,12 @@ resource "aws_key_pair" "anzcd_infra_jenkins" {
 }
 
 resource "aws_iam_instance_profile" "jenkins-master" {
-  name = "${var.tags["Name"]}-jenkins-master"
+  name = "${var.name}-jenkins-master"
   role = aws_iam_role.jenkins_role.name
 }
 
 resource "aws_launch_template" "jenkins-master" {
-  name_prefix            = "${var.tags["Name"]}-jenkins-master"
+  name_prefix            = "${var.name}-jenkins-master"
   image_id               = var.ami_id
   instance_type          = var.instance_type
   vpc_security_group_ids = ["${aws_security_group.jenkins-master.id}"]
@@ -78,7 +78,7 @@ resource "aws_launch_template" "jenkins-master" {
 }
 
 resource "aws_autoscaling_group" "jenkins-master" {
-  name_prefix = "${var.tags["Name"]}-jenkins-master"
+  name_prefix = "${var.name}-jenkins-master"
 
   launch_template {
     id      = aws_launch_template.jenkins-master.id
@@ -94,7 +94,7 @@ resource "aws_autoscaling_group" "jenkins-master" {
   health_check_type         = "ELB"
   health_check_grace_period = "600"
 
-  tags = [map("key", "Name", "value", "${var.tags["Name"]}-jenkins-master", "propagate_at_launch", "true")]
+  tags = [map("key", "Name", "value", "${var.name}-jenkins-master", "propagate_at_launch", "true")]
 }
 
 output "master_ssh" {

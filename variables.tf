@@ -46,6 +46,12 @@ variable "agents_max_size" {
   default     = "20"
 }
 
+variable "agents_desired_capacity" {
+  description = "Desired capacity of agents ASG"
+  default     = "1"
+}
+
+
 variable "agents_instance_type" {
   description = "Instance type of agents"
   default     = "c5.large"
@@ -61,8 +67,14 @@ variable "agents_spot_price" {
   default     = "0.5"
 }
 
+variable "create_dns_record" {
+  description = "Create or not DNS Record"
+  default = true
+}
+
 variable "dns_zone" {
   description = "DNS zone ID used for Jenkins records"
+  default = null
 }
 
 variable "dns_base_name" {
@@ -125,4 +137,8 @@ variable "windows_workers" {
 
 variable "account_name" {
   description = "account name"
+}
+
+variable "name" {
+  description = "name of jenkins"
 }
