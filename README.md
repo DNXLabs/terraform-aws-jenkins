@@ -67,9 +67,9 @@ The following resources will be created:
 | agents\_max\_size | Max size of agents ASG | `string` | `"20"` | no |
 | agents\_min\_size | Minimum size of agents ASG | `string` | `"2"` | no |
 | agents\_spot\_price | Max price for spot bids on agents | `string` | `"0.5"` | no |
-| agents\_subnet\_ids | Subnet IDs for the Jenkins agents. | `list` | n/a | yes |
+| agents\_subnet\_ids | Subnet IDs for the Jenkins agents. | `list(any)` | n/a | yes |
 | ami\_id | AMI ID used by the Jenkins master instance | `string` | `"ami-08589eca6dcc9b39c"` | no |
-| asg\_tags | Tags used for ASGs, has an addition attribute propagate\_at\_launch on every map. Do not include 'Name'. | `list` | n/a | yes |
+| asg\_tags | Tags used for ASGs, has an addition attribute propagate\_at\_launch on every map. Do not include 'Name'. | `list(any)` | n/a | yes |
 | aws\_key\_pair\_name | Keypair for the Jenkins master instance | `any` | n/a | yes |
 | aws\_key\_pair\_public\_key | Public Key in authorized\_keys format | `any` | n/a | yes |
 | create\_dns\_record | Create or not DNS Record | `bool` | `true` | no |
@@ -80,14 +80,14 @@ The following resources will be created:
 | instance\_type | Instance type used by Jenkins master instance | `string` | `"t3.medium"` | no |
 | jenkins-cert | ACM Certificate Domain Name for Jenkins | `any` | n/a | yes |
 | jenkins\_unique\_id | Unique ID used to identify the EBS volume accross instance terminations | `any` | n/a | yes |
-| lb\_subnet\_ids | Subnet IDs for the ALB. | `list` | n/a | yes |
+| lb\_subnet\_ids | Subnet IDs for the ALB. | `list(any)` | n/a | yes |
 | linux\_workers | If set to true, enable linux workers | `bool` | n/a | yes |
 | master\_ebs\_jenkinshome\_size | Size of the master jenkins home volume | `string` | `"50"` | no |
 | master\_ebs\_root\_size | Size of the master EBS root volume | `string` | `"20"` | no |
-| master\_subnet\_ids | Subnet ID for the Jenkins master instance. Multi AZ is supported :) | `list` | n/a | yes |
+| master\_subnet\_ids | Subnet ID for the Jenkins master instance. Multi AZ is supported :) | `list(any)` | n/a | yes |
 | name | name of jenkins | `any` | n/a | yes |
 | no\_proxy | Proxy exceptions used in the Jenkins userdata script | `any` | n/a | yes |
-| tags | Tags used for all resources except asgs | `map` | n/a | yes |
+| tags | Tags used for all resources except asgs | `map(any)` | n/a | yes |
 | vpc\_id | VPC ID used by the Jenkins master instance | `any` | n/a | yes |
 | windows\_ami\_id | AMI ID used by the Jenkins master instance | `string` | `"ami-0bbaefd8648c81cc8"` | no |
 | windows\_workers | If set to true, enable windows workers | `bool` | n/a | yes |
