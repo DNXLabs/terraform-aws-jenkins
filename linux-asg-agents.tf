@@ -11,7 +11,7 @@ resource "aws_autoscaling_group" "linux-jenkins-agents" {
   enabled_metrics     = ["GroupMinSize", "GroupMaxSize", "GroupDesiredCapacity", "GroupInServiceInstances", "GroupPendingInstances", "GroupStandbyInstances", "GroupTerminatingInstances", "GroupTotalInstances"]
   min_size            = var.agents_min_size
   max_size            = var.agents_max_size
-  desired_capacity = var.agents_desired_capacity
+  desired_capacity    = var.agents_desired_capacity
 
   tags = [map("key", "Name", "value", "${var.name}-linux-jenkins-agents", "propagate_at_launch", "true")]
 }

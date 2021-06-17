@@ -76,7 +76,7 @@ resource "aws_lb_target_group" "jenkins-master-tg" {
 }
 
 resource "aws_route53_record" "jenkins" {
-  count = var.create_dns_record == true ? 1 : 0
+  count   = var.create_dns_record == true ? 1 : 0
   zone_id = var.dns_zone
   name    = var.dns_name
   type    = "A"

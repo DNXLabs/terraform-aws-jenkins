@@ -22,17 +22,17 @@ variable "vpc_id" {
 }
 
 variable "master_subnet_ids" {
-  type        = list
+  type        = list(any)
   description = "Subnet ID for the Jenkins master instance. Multi AZ is supported :)"
 }
 
 variable "agents_subnet_ids" {
-  type        = list
+  type        = list(any)
   description = "Subnet IDs for the Jenkins agents."
 }
 
 variable "lb_subnet_ids" {
-  type        = list
+  type        = list(any)
   description = "Subnet IDs for the ALB."
 }
 
@@ -69,12 +69,12 @@ variable "agents_spot_price" {
 
 variable "create_dns_record" {
   description = "Create or not DNS Record"
-  default = true
+  default     = true
 }
 
 variable "dns_zone" {
   description = "DNS zone ID used for Jenkins records"
-  default = null
+  default     = null
 }
 
 variable "dns_base_name" {
@@ -86,12 +86,12 @@ variable "dns_name" {
 }
 
 variable "tags" {
-  type        = map
+  type        = map(any)
   description = "Tags used for all resources except asgs"
 }
 
 variable "asg_tags" {
-  type        = list
+  type        = list(any)
   description = "Tags used for ASGs, has an addition attribute propagate_at_launch on every map. Do not include 'Name'."
 }
 
